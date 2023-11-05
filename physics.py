@@ -251,14 +251,15 @@ class simulation:
 
     def draw_graph(self):
         try:
+            plt.ion()
+            fig = plt.figure()
             for i in range(len(self.xlines[0])):
-                fig = plt.figure()
                 ax = plt.axes(projection='3d')
                 for p in range(len(self.particles)):
                     ax.plot3D(self.xlines[p][:i], self.ylines[p][:i], self.zlines[p][:i], colour(p))
-                plt.show(block=False)
+                plt.draw()
                 plt.pause(0.2)
-                plt.close()
+                plt.clf()
         except Exception as E:
             print(E)
 
