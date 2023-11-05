@@ -258,7 +258,7 @@ class simulation:
                 for p in range(len(self.particles)):
                     ax.plot3D(self.xlines[p][:i], self.ylines[p][:i], self.zlines[p][:i], colour(p))
                 plt.draw()
-                plt.pause(0.2)
+                plt.pause(0.005)
                 plt.clf()
         except Exception as E:
             print(E)
@@ -273,10 +273,11 @@ if (len(sys.argv) == 2):
     tick_cnt = int(sys.argv[1])
 
 # particle(mass, x, y, z, xvector, yvector, zvector)
-p1 = particle(5.3 * (10 ** 16), 1500, 9536, 99925, -900000, 90124, 525667)
-p2 = particle(5.3 * (10 ** 16), 912412412, 124124120, 5353620, -4387860, 0, 0)
+p1 = particle(5.3 * (10 ** 13), 100124124, -934124996, 999966435, 900000, 90124, 525667)
+p2 = particle(5.3 * (10 ** 13), 942141242, 112414720, 535363430, -4387860, 0, 0)
+p3 = particle(5.3 * (10 ** 18), 500000, 100000, 100000, -50000, 5000, 5000)
 
-sim = simulation(p1, p2, ticks=tick_cnt, tick_size=tick_sz)
+sim = simulation(p1, p2, p3, ticks=tick_cnt, tick_size=tick_sz)
 sim.run()
 sim.draw_graph()
 
