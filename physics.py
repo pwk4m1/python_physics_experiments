@@ -245,23 +245,26 @@ class simulation:
             print("*" * 80)
             physics.run_frame(*self.particles, framesize=self.framesize)
             for p in range(len(self.particles)):
-                self.xlines[p].append(self.particles[p].x())
-                self.ylines[p].append(self.particles[p].y())
-                self.zlines[p].append(self.particles[p].z())
+                self.xlines[p].append(self.particles[p].x() / 1000)
+                self.ylines[p].append(self.particles[p].y() / 1000)
+                self.zlines[p].append(self.particles[p].z() / 1000)
 
     def draw_graph(self):
         try:
-            fig = plt.figure()
-            ax = plt.axes(projection='3d')
-            for p in range(len(self.particles)):
-                ax.plot3D(self.xlines[p], self.ylines[p], self.zlines[p], colour(p))
-            plt.show()
+            for i in range(len(self.xlines[0])):
+                fig = plt.figure()
+                ax = plt.axes(projection='3d')
+                for p in range(len(self.particles)):
+                    ax.plot3D(self.xlines[p][:i], self.ylines[p][:i], self.zlines[p][:i], colour(p))
+                plt.show(block=False)
+                plt.pause(0.2)
+                plt.close()
         except Exception as E:
             print(E)
 
 def colour(x):
     colours = ["red", "blue", "gray", "yellow", "green"]
-    return colours[x]
+    return colours[x % len(colours)]
 
 tick_sz=1
 tick_cnt=9000
@@ -269,8 +272,8 @@ if (len(sys.argv) == 2):
     tick_cnt = int(sys.argv[1])
 
 # particle(mass, x, y, z, xvector, yvector, zvector)
-p1 = particle(5.3 * (10 ** 16), 1500, 9536, 99925, 5800, 90124, 525667)
-p2 = particle(5.3 * (10 ** 16), -742923, 53351235, 0, 235000, 90000, 0)
+p1 = particle(5.3 * (10 ** 16), 1500, 9536, 99925, -900000, 90124, 525667)
+p2 = particle(5.3 * (10 ** 16), 912412412, 124124120, 5353620, -4387860, 0, 0)
 
 sim = simulation(p1, p2, ticks=tick_cnt, tick_size=tick_sz)
 sim.run()
