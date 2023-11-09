@@ -235,6 +235,8 @@ class simulation:
         self.framesize = tick_size
 
     def run(self):
+        plt.ion()
+        fig = plt.figure()
         for p in self.particles:
             self.xlines.append([])
             self.ylines.append([])
@@ -245,39 +247,26 @@ class simulation:
             print("*" * 80)
             physics.run_frame(*self.particles, framesize=self.framesize)
             for p in range(len(self.particles)):
-                self.xlines[p].append(self.particles[p].x() / 1000)
-                self.ylines[p].append(self.particles[p].y() / 1000)
-                self.zlines[p].append(self.particles[p].z() / 1000)
+                self.xlines[p].append(self.particles[p].x() / 1000 / 1000)
+                self.ylines[p].append(self.particles[p].y() / 1000 / 1000)
+                self.zlines[p].append(self.particles[p].z() / 1000 / 1000)
+            ax = plt.axes(projection='3d')
+            for p in range(len(self.particles)):
+                ax.plot3D(self.xlines[p], self.ylines[p], self.zlines[p])
+            plt.draw()
+            plt.pause(0.00005)
+            plt.clf()
 
-    def draw_graph(self):
-        try:
-            plt.ion()
-            fig = plt.figure()
-            for i in range(len(self.xlines[0])):
-                ax = plt.axes(projection='3d')
-                for p in range(len(self.particles)):
-                    ax.plot3D(self.xlines[p][:i], self.ylines[p][:i], self.zlines[p][:i], colour(p))
-                plt.draw()
-                plt.pause(0.005)
-                plt.clf()
-        except Exception as E:
-            print(E)
-
-def colour(x):
-    colours = ["red", "blue", "gray", "yellow", "green"]
-    return colours[x % len(colours)]
-
-tick_sz=1
+tick_sz=3600
 tick_cnt=9000
 if (len(sys.argv) == 2):
     tick_cnt = int(sys.argv[1])
 
 # particle(mass, x, y, z, xvector, yvector, zvector)
-p1 = particle(5.3 * (10 ** 13), 100124124, -934124996, 999966435, 900000, 90124, 525667)
-p2 = particle(5.3 * (10 ** 13), 942141242, 112414720, 535363430, -4387860, 0, 0)
-p3 = particle(5.3 * (10 ** 18), 500000, 100000, 100000, -50000, 5000, 5000)
+p1 = particle(5.3 * (10 ** 13), 1.5 * (10 ** 9), 1.6 * (10 ** 9), 1.9 * (10 ** 9), 5000, 150, 0)
+p2 = particle(5.3 * (10 ** 14), 1.5 * (10 ** 9), -1.6 * (10 ** 9), 3.9 * (10 ** 9), 500000, 0, 0)
+p3 = particle(5.3 * (10 ** 15), 3.5 * (10 ** 9), 3.2 * (10 ** 9), 5.9 * (10 ** 9), -900000, 150, -5000)
 
 sim = simulation(p1, p2, p3, ticks=tick_cnt, tick_size=tick_sz)
 sim.run()
-sim.draw_graph()
 
